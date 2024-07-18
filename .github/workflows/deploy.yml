@@ -31,7 +31,7 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.6.1
         with:
-          docker_name: 'owasp/zap2docker-stable'
+          docker_name: 'owasp/zap2docker-stable:latest'
           target: 'https://fernandomartinserrano-592ac9e9328f.herokuapp.com/'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
