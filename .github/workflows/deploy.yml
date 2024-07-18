@@ -2,8 +2,7 @@ name: Deploy to Heroku
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build-deploy:
@@ -12,7 +11,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
+
       - name: Run SonarQube analysis
         uses: sonarsource/sonarqube-scan-action@master
         env:
