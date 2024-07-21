@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
 
       - name: install dependencias
-        run: npm ci
+        run: npm install
 
       - name: Audit dependencias
         run: npm audit --audit-level=higt
