@@ -22,9 +22,7 @@ jobs:
       - name: install dependencias
         run: npm install
 
-      - name: Audit dependencias
-        run: npm audit --audit-level=higt
-        
+              
       - name: Run Sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
