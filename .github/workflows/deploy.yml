@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Deploy to Heroku and app-vulnerable by test ekohackademy
 
 on:
   push:
@@ -29,6 +29,27 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      - name: OWASP Dependency-Check
+        run: |
+          docker run --rm \
+          -v $(pwd):/src \
+          -v $(pwd)/odc-data:/usr/share/dependency-check/data \
+          -v $(pwd)/odc-reports:/report \
+          owasp/dependency-check \
+          --format "HTML" \
+          --project "your-project-name" \
+          --scan /src
+        
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Upload OWASP Dependency-Check Report
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+            name: OWASP Dependency-Check report
+            path: dependency-check-report/*.html
+
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.10.0
         with:
@@ -58,6 +79,7 @@ jobs:
         run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+          
       - name: Clean up
         run: docker rmi registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
 
