@@ -37,7 +37,7 @@ jobs:
           -v $(pwd)/odc-reports:/report \
           owasp/dependency-check \
           --format "HTML" \
-          --project "your-project-name" \
+          --project "vulnerable-web-app" \
           --scan /src
         
         env:
