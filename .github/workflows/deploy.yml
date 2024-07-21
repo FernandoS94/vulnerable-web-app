@@ -20,8 +20,11 @@ jobs:
           node-version: '20'
 
       - name: install dependencias
-        run: npm install
+        run: npm ci
 
+      - name: Audit dependencias
+        run: npm audit --audit-level=higt
+        
       - name: Run Sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -42,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ZAP report
-          path: zap_report.html
+          path: report_html.html
           
 
       - name: Login to Heroku Container Registry
@@ -56,4 +59,8 @@ jobs:
       - name: Release Docker image on Heroku
         run: heroku container:release web --app ${{ secrets.HEROKU_APP_NAME }}
         env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
+      - name: Clean up
+        run: docker rmi registry.heroku.com/${{ secrets.HEROKU_APP_NAME }}/web
+
+          
